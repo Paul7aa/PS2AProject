@@ -31,3 +31,6 @@ D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.gen
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\ref\PS2AProject.dll
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.g.cs
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.baml
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.baml

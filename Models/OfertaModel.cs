@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,18 @@ namespace PS2AProject.Models
         private String _tipExcursie;
         private Int32 _idExcursie;
         private Byte _reducere;
+        private Double _pretInitial;
+        private Double _pretFinal;
 
-        public OfertaModel(int idOferta, string tipOferta, string tipExcursie, int idExcursie, byte reducere)
+        public OfertaModel(int idOferta, string tipOferta, string tipExcursie, int idExcursie, byte reducere, double pretInitial, double pretFinal)
         {
             _idOferta = idOferta;
             _tipOferta = tipOferta;
             _tipExcursie = tipExcursie;
             _idExcursie = idExcursie;
             _reducere = reducere;
+            _pretInitial = pretInitial;
+            _pretFinal = pretFinal;
         }
 
         public Int32 IdOferta
@@ -69,6 +74,26 @@ namespace PS2AProject.Models
             set
             {
                 _reducere = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Double PretInitial
+        {
+            get => _pretInitial;
+            set
+            {
+                _pretInitial = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Double PretFinal
+        {
+            get => _pretInitial;
+            set
+            {
+                _pretInitial = value;
                 OnPropertyChanged();
             }
         }

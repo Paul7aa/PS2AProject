@@ -6,6 +6,9 @@
     xmlns:local="clr-namespace:PS2AProject.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:uc="clr-namespace:PS2AProject.UserControls"
+    xmlns:validation="clr-namespace:PS2AProject.Domain.ValidationRules"
     Title="Firma de Turism Virtual"
     Width="1500"
     Height="1000"
@@ -21,6 +24,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <Style x:Key="WrappingTextBlock" TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
                     <Style
                         x:Key="NavRailStyle"
                         BasedOn="{StaticResource MaterialDesignNavigationRailTabItem}"
@@ -32,9 +38,1457 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <materialDesign:DialogHost CloseOnClickAway="False" IsOpen="{Binding DialogHostOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+    <materialDesign:DialogHost CloseOnClickAway="True" IsOpen="{Binding IsDialogHostOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
         <materialDesign:DialogHost.DialogContent>
-            <Grid />
+            <Grid>
+                <Grid
+                    x:Name="AddSejurDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddSejurDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Center"
+                            FontSize="20"
+                            Text="Adăugare Sejur" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Sezon" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding Sezoane}"
+                            SelectedItem="{Binding SelectedSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Țara" />
+                        <TextBox
+                            x:Name="enteredTara"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            MaxLength="50">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredTara"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Localitate" />
+                        <TextBox
+                            x:Name="enteredLocalitate"
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            MaxLength="50">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredLocalitate"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Început perioadă" />
+                        <DatePicker
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            DisplayDateStart="{x:Static sys:DateTime.Today}"
+                            SelectedDateFormat="Short">
+                            <DatePicker.SelectedDate>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredStartDate"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules />
+                                </Binding>
+                            </DatePicker.SelectedDate>
+                        </DatePicker>
+
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Sfârșit perioadă" />
+                        <DatePicker
+                            x:Name="enteredEndDate"
+                            Grid.Row="6"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            DisplayDateStart="{x:Static sys:DateTime.Today}">
+                            <DatePicker.Resources>
+                                <validation:BindingProxy x:Key="proxy" Data="{Binding}" />
+                            </DatePicker.Resources>
+                            <DatePicker.SelectedDate>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredEndDate"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:LaterThanStartValidationRule>
+                                            <validation:LaterThanStartValidationRule.StartDate>
+                                                <validation:Wrapper StartDate="{Binding Data.EnteredStartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={StaticResource proxy}}" />
+                                            </validation:LaterThanStartValidationRule.StartDate>
+                                        </validation:LaterThanStartValidationRule>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </DatePicker.SelectedDate>
+                        </DatePicker>
+
+                        <TextBlock
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Număr nopți" />
+                        <TextBox
+                            Grid.Row="7"
+                            Grid.Column="2"
+                            Width="100"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"
+                            Text="{Binding CalculatedNights, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Tip Cazare" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding TipuriCazare}"
+                            SelectedItem="{Binding SelectedTipCazare, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Denumire" />
+                        <TextBox
+                            x:Name="enteredDenumire"
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            IsReadOnly="False"
+                            MaxLength="50">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredDenumire"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="NrStele" />
+                        <ComboBox
+                            Grid.Row="4"
+                            Grid.Column="4"
+                            Width="100"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding NrStele}"
+                            SelectedItem="{Binding SelectedNrStele, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="5"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Mese" />
+                        <ComboBox
+                            Grid.Row="5"
+                            Grid.Column="4"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding Mese}"
+                            SelectedItem="{Binding SelectedMese, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Facilități" />
+                        <TextBox
+                            x:Name="enteredFacilitati"
+                            Grid.Row="6"
+                            Grid.RowSpan="3"
+                            Grid.Column="4"
+                            Width="150"
+                            Height="200"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            AcceptsReturn="True"
+                            IsReadOnly="False"
+                            MaxLength="100"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredFacilitati"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="8"
+                            Grid.Column="1"
+                            Margin="0,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Transport" />
+                        <ComboBox
+                            Grid.Row="8"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding Transport}"
+                            SelectedItem="{Binding SelectedTransport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="9"
+                            Grid.Column="1"
+                            Margin="0,50,0,0"
+                            VerticalAlignment="Center"
+                            Text="Preț Transport" />
+                        <TextBox
+                            x:Name="enteredPretTransport"
+                            Grid.Row="9"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,50,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            IsReadOnly="False">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredPretTransport"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                        <validation:DoubleValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="9"
+                            Grid.Column="3"
+                            Margin="50,0,0,0"
+                            VerticalAlignment="Bottom"
+                            Text="Preț Cazare" />
+                        <TextBox
+                            x:Name="enteredPretCazare"
+                            Grid.Row="9"
+                            Grid.Column="4"
+                            Width="150"
+                            Margin="20,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            IsReadOnly="False">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredPretCazare"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                        <validation:DoubleValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <Button
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Width="150"
+                            Margin="0,50,0,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding AddSejurCommand}"
+                            Content="Adaugă">
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredEndDate}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTara}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredLocalitate}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredDenumire}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredFacilitati}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretTransport}" Value="False" />
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretCazare}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button
+                            Grid.Row="10"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="2"
+                            Width="150"
+                            Margin="0,50,0,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding CloseDialogHost}"
+                            Content="Anulează" />
+
+                    </Grid>
+                </Grid>
+
+                <Grid Margin="10,0,10,0" Visibility="{Binding IsSejurCazareDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        FontSize="20"
+                        Text="Detalii Cazare" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,20,0,0"
+                        Text="Tip Cazare :" />
+
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Width="150"
+                        Margin="20,20,0,0"
+                        IsReadOnly="True"
+                        Text="{Binding SelectedSejur.TipCazare}" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="0,20,0,0"
+                        Text="Denumire :" />
+
+                    <TextBox
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Width="150"
+                        Margin="20,20,0,0"
+                        IsReadOnly="True"
+                        Text="{Binding SelectedSejur.Denumire}" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="0,20,0,0"
+                        Text="NrStele :" />
+
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Width="150"
+                        Margin="20,20,0,0"
+                        HorizontalAlignment="Left"
+                        IsReadOnly="True"
+                        Text="{Binding SelectedSejur.NrStele}" />
+
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="0,20,0,0"
+                        Text="Mese :" />
+
+                    <TextBox
+                        Grid.Row="5"
+                        Grid.Column="2"
+                        Width="150"
+                        Margin="20,20,0,0"
+                        HorizontalAlignment="Left"
+                        IsReadOnly="True"
+                        Text="{Binding SelectedSejur.Mese}" />
+
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Margin="0,20,0,0"
+                        Text="Facilitati :" />
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="2"
+                        Width="150"
+                        Height="Auto"
+                        Margin="20,20,0,0"
+                        HorizontalAlignment="Left"
+                        Text="{Binding SelectedSejur.Facilitati}">
+                        <TextBlock.Style>
+                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                </Grid>
+
+                <Grid
+                    x:Name="AddCroazieraDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddCroazieraDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="20" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="Adăugare Croazieră" />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Sezon" />
+                            <ComboBox
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                ItemsSource="{Binding Sezoane}"
+                                SelectedItem="{Binding SelectedSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Țara" />
+                            <TextBox
+                                x:Name="enteredTaraCroaziera"
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                MaxLength="50">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredTara"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Început perioadă" />
+                            <DatePicker
+                                Grid.Row="4"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                DisplayDateStart="{x:Static sys:DateTime.Today}"
+                                SelectedDateFormat="Short">
+                                <DatePicker.SelectedDate>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredStartDate"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules />
+                                    </Binding>
+                                </DatePicker.SelectedDate>
+                            </DatePicker>
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Sfârșit perioadă" />
+                            <DatePicker
+                                x:Name="enteredEndDateCroaziera"
+                                Grid.Row="5"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                DisplayDateStart="{x:Static sys:DateTime.Today}">
+                                <DatePicker.Resources>
+                                    <validation:BindingProxy x:Key="proxy" Data="{Binding}" />
+                                </DatePicker.Resources>
+                                <DatePicker.SelectedDate>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredEndDate"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:LaterThanStartValidationRule>
+                                                <validation:LaterThanStartValidationRule.StartDate>
+                                                    <validation:Wrapper StartDate="{Binding Data.EnteredStartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={StaticResource proxy}}" />
+                                                </validation:LaterThanStartValidationRule.StartDate>
+                                            </validation:LaterThanStartValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </DatePicker.SelectedDate>
+                            </DatePicker>
+
+                            <TextBlock
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Categorie Vas" />
+                            <ComboBox
+                                Grid.Row="6"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                ItemsSource="{Binding CategoriiVase}"
+                                SelectedItem="{Binding SelectedCategorieVas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="3"
+                                Margin="50,20,0,0"
+                                VerticalAlignment="Center"
+                                Text="Traseu" />
+
+                            <TextBox
+                                x:Name="enteredTraseuCroaziera"
+                                Grid.Row="2"
+                                Grid.RowSpan="2"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredTraseu"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="3"
+                                Margin="50,20,0,0"
+                                VerticalAlignment="Center"
+                                Text="Vizite" />
+
+                            <TextBox
+                                x:Name="enteredViziteCroaziera"
+                                Grid.Row="4"
+                                Grid.RowSpan="2"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredVizite"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="6"
+                                Grid.Column="3"
+                                Margin="50,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Facilități" />
+                            <TextBox
+                                x:Name="enteredFacilitatiCroaziera"
+                                Grid.Row="6"
+                                Grid.RowSpan="2"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredFacilitati"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="9"
+                                Grid.Column="1"
+                                Margin="0,50,0,0"
+                                VerticalAlignment="Center"
+                                Text="Preț Transport" />
+                            <TextBox
+                                x:Name="enteredPretTransportCroaziera"
+                                Grid.Row="9"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,50,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                IsReadOnly="False">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredPretTransport"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                            <validation:DoubleValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="9"
+                                Grid.Column="3"
+                                Margin="50,0,0,0"
+                                VerticalAlignment="Bottom"
+                                Text="Preț Cazare" />
+                            <TextBox
+                                x:Name="enteredPretCazareCroaziera"
+                                Grid.Row="9"
+                                Grid.Column="4"
+                                Width="150"
+                                Margin="20,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                IsReadOnly="False">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredPretCazare"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                            <validation:DoubleValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <Button
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Width="150"
+                                Margin="0,50,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding AddCroazieraCommand}"
+                                Content="Adaugă">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTaraCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredViziteCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredFacilitatiCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredEndDateCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTraseuCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretCazareCroaziera}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretTransportCroaziera}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Button
+                                Grid.Row="10"
+                                Grid.Column="3"
+                                Grid.ColumnSpan="2"
+                                Width="150"
+                                Margin="0,50,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding CloseDialogHost}"
+                                Content="Anulează" />
+
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid
+                    x:Name="AddCircuitDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddCircuitDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="20" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="Adăugare Circuit" />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Sezon" />
+                            <ComboBox
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                ItemsSource="{Binding Sezoane}"
+                                SelectedItem="{Binding SelectedSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="3"
+                                Margin="50,20,0,0"
+                                VerticalAlignment="Center"
+                                Text="Traseu" />
+
+                            <TextBox
+                                x:Name="enteredTraseuCircuit"
+                                Grid.Row="2"
+                                Grid.RowSpan="2"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredTraseu"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Țara" />
+                            <TextBox
+                                x:Name="enteredTaraCircuit"
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                MaxLength="50">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredTara"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Început perioadă" />
+                            <DatePicker
+                                Grid.Row="4"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                DisplayDateStart="{x:Static sys:DateTime.Today}"
+                                SelectedDateFormat="Short">
+                                <DatePicker.SelectedDate>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredStartDate"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules />
+                                    </Binding>
+                                </DatePicker.SelectedDate>
+                            </DatePicker>
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="3"
+                                Margin="50,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Vizite" />
+
+                            <TextBox
+                                x:Name="enteredViziteCircuit"
+                                Grid.Row="4"
+                                Grid.RowSpan="1"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,30,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredVizite"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Sfârșit perioadă" />
+                            <DatePicker
+                                x:Name="enteredEndDateCircuit"
+                                Grid.Row="5"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                VerticalAlignment="Center"
+                                DisplayDateStart="{x:Static sys:DateTime.Today}">
+                                <DatePicker.Resources>
+                                    <validation:BindingProxy x:Key="proxy" Data="{Binding}" />
+                                </DatePicker.Resources>
+                                <DatePicker.SelectedDate>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredEndDate"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:LaterThanStartValidationRule>
+                                                <validation:LaterThanStartValidationRule.StartDate>
+                                                    <validation:Wrapper StartDate="{Binding Data.EnteredStartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Source={StaticResource proxy}}" />
+                                                </validation:LaterThanStartValidationRule.StartDate>
+                                            </validation:LaterThanStartValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </DatePicker.SelectedDate>
+                            </DatePicker>
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="3"
+                                Margin="50,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Mese" />
+                            <ComboBox
+                                Grid.Row="5"
+                                Grid.Column="4"
+                                Width="150"
+                                Margin="20,30,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                ItemsSource="{Binding Mese}"
+                                SelectedItem="{Binding SelectedMese, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <StackPanel
+                                Grid.Row="6"
+                                Grid.Column="3"
+                                Margin="50,30,0,0"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="Facilități" />
+                                <TextBlock Text="Cazare" />
+
+                            </StackPanel>
+
+
+                            <TextBlock
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                Margin="0,30,0,0"
+                                VerticalAlignment="Center"
+                                Text="Număr nopți" />
+                            <TextBox
+                                Grid.Row="6"
+                                Grid.Column="2"
+                                Width="100"
+                                Margin="20,30,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                IsReadOnly="True"
+                                Text="{Binding CalculatedNights, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBox
+                                x:Name="enteredFacilitatiCircuit"
+                                Grid.Row="6"
+                                Grid.RowSpan="2"
+                                Grid.Column="4"
+                                Width="150"
+                                Height="110"
+                                Margin="20,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                AcceptsReturn="True"
+                                IsReadOnly="False"
+                                MaxLength="100"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredFacilitati"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <TextBlock
+                                Grid.Row="9"
+                                Grid.Column="1"
+                                Margin="0,50,0,0"
+                                VerticalAlignment="Center"
+                                Text="Preț Transport" />
+                            <TextBox
+                                x:Name="enteredPretTransportCircuit"
+                                Grid.Row="9"
+                                Grid.Column="2"
+                                Width="150"
+                                Margin="20,50,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                IsReadOnly="False">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredPretTransport"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                            <validation:DoubleValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="9"
+                                Grid.Column="3"
+                                Margin="50,0,0,0"
+                                VerticalAlignment="Bottom"
+                                Text="Preț Cazare" />
+                            <TextBox
+                                x:Name="enteredPretCazareCircuit"
+                                Grid.Row="9"
+                                Grid.Column="4"
+                                Width="150"
+                                Margin="20,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                IsReadOnly="False">
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EnteredPretCazare"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:NotEmptyValidationRule />
+                                            <validation:DoubleValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <Button
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Width="150"
+                                Margin="0,50,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding AddCircuitCommand}"
+                                Content="Adaugă">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTaraCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredViziteCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredFacilitatiCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredEndDateCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTraseuCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretCazareCircuit}" Value="False" />
+                                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredPretTransportCircuit}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Button
+                                Grid.Row="10"
+                                Grid.Column="3"
+                                Grid.ColumnSpan="2"
+                                Width="150"
+                                Margin="0,50,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding CloseDialogHost}"
+                                Content="Anulează" />
+
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid
+                    x:Name="AddOfertaDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddOfertaDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Center"
+                            FontSize="20"
+                            Text="Adăugare Ofertă" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="20,20,0,0"
+                            VerticalAlignment="Bottom"
+                            Text="Tip Ofertă" />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,20,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            IsReadOnly="False">
+                            <TextBox.Text>
+                                <Binding
+                                    Mode="TwoWay"
+                                    Path="EnteredTipOferta"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Tip Excursie" />
+                        <ComboBox
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding TipExcursie}"
+                            SelectedItem="{Binding SelectedTipExcursie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            Margin="50,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Id" />
+                        <ComboBox
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            Width="150"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            ItemsSource="{Binding IDs, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Border
+                            Grid.Row="5"
+                            Grid.RowSpan="4"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="4"
+                            Width="700"
+                            Height="600"
+                            Margin="20"
+                            BorderBrush="Teal"
+                            BorderThickness="1.5">
+                            <Grid>
+                                <uc:InfoControl />
+                            </Grid>
+
+                        </Border>
+
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Reducere" />
+
+                        <TextBox
+                            Grid.Row="6"
+                            Grid.Column="2"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding EnteredReducere, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="3"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Pret Inițial" />
+
+                        <TextBox
+                            Grid.Row="6"
+                            Grid.Column="4"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"
+                            Text="{Binding PretInitial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Grid.Row="7"
+                            Grid.Column="3"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            Text="Pret Final" />
+
+                        <TextBox
+                            Grid.Row="7"
+                            Grid.Column="4"
+                            Margin="20,30,0,0"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"
+                            Text="{Binding PretFinal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Button
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Width="150"
+                            Margin="0,50,0,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding AddOfertaCommand}"
+                            Content="Adaugă">
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=enteredTaraCroaziera}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button
+                            Grid.Row="10"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="2"
+                            Width="150"
+                            Margin="0,50,0,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding CloseDialogHost}"
+                            Content="Anulează" />
+
+                    </Grid>
+                </Grid>
+                <Grid
+                    x:Name="AddClientDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddClientDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Text="ADD CLIENT" />
+                </Grid>
+                <Grid
+                    x:Name="AddIncasareDialogHost"
+                    Margin="10,0,10,0"
+                    Visibility="{Binding IsAddIncasareDialogHostOpen, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Text="ADD INCASARE" />
+                </Grid>
+            </Grid>
         </materialDesign:DialogHost.DialogContent>
 
         <Grid>
@@ -98,15 +1552,62 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
 
-                                            <DataGrid
+                                            <StackPanel
                                                 Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="sejur"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteSejurCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="sejur"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+
+                                                <TextBlock
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="Sezon: " />
+                                                <ComboBox
+                                                    Width="150"
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    ItemsSource="{Binding Sezoane}"
+                                                    SelectedItem="{Binding SelectedSejurSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
                                                 Grid.Column="1"
                                                 Width="Auto"
                                                 Height="Auto"
+                                                Margin="0,10,0,0"
                                                 AutoGenerateColumns="False"
                                                 BorderBrush="LightBlue"
                                                 BorderThickness="0.75"
@@ -115,9 +1616,18 @@
                                                 CanUserResizeRows="False"
                                                 CanUserSortColumns="True"
                                                 CellStyle="{StaticResource MaterialDesignDataGridCell}"
-                                                ItemsSource="{Binding Sejururi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding SejururiList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedSejur, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 SelectionMode="Single"
                                                 SelectionUnit="FullRow">
+                                                <DataGrid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem
+                                                            Command="{Binding OpenDialogHostCommand}"
+                                                            CommandParameter="sejurcazare"
+                                                            Header="Afișare detalii cazare" />
+                                                    </ContextMenu>
+                                                </DataGrid.ContextMenu>
                                                 <DataGrid.Columns>
                                                     <DataGridTemplateColumn>
                                                         <DataGridTemplateColumn.CellTemplate>
@@ -132,7 +1642,7 @@
                                                     <DataGridTextColumn
                                                         Width="0.75*"
                                                         Binding="{Binding IdSejur}"
-                                                        Header="IdSejur"
+                                                        Header="IdSe"
                                                         IsReadOnly="True" />
                                                     <DataGridTextColumn
                                                         Width="0.75*"
@@ -160,9 +1670,9 @@
                                                         Header="DataSfârșit"
                                                         IsReadOnly="True" />
                                                     <DataGridTextColumn
-                                                        Width="*"
+                                                        Width="0.75*"
                                                         Binding="{Binding NumarNopti}"
-                                                        Header="NumărNopți"
+                                                        Header="NrNopți"
                                                         IsReadOnly="True" />
                                                     <DataGridTextColumn
                                                         Width="*"
@@ -187,7 +1697,6 @@
 
                                                 </DataGrid.Columns>
                                             </DataGrid>
-
                                         </Grid>
                                     </TabItem.Content>
                                 </TabItem>
@@ -215,10 +1724,155 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
 
+                                            <StackPanel
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="croaziera"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteCroazieraCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="croaziera"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+
+                                                <TextBlock
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="Sezon: " />
+                                                <ComboBox
+                                                    Width="150"
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    ItemsSource="{Binding Sezoane}"
+                                                    SelectedItem="{Binding SelectedCroazieraSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Width="Auto"
+                                                Height="Auto"
+                                                Margin="0,10,0,0"
+                                                AutoGenerateColumns="False"
+                                                BorderBrush="LightBlue"
+                                                BorderThickness="0.75"
+                                                CanUserDeleteRows="False"
+                                                CanUserReorderColumns="False"
+                                                CanUserResizeRows="False"
+                                                CanUserSortColumns="True"
+                                                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                                                ItemsSource="{Binding CroaziereList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedCroaziera, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectionMode="Single"
+                                                SelectionUnit="FullRow">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Text="*" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn
+                                                        Width="0.75*"
+                                                        Binding="{Binding IdCroaziera}"
+                                                        Header="IdCr"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="0.75*"
+                                                        Binding="{Binding Sezon}"
+                                                        Header="Sezon"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Tara}"
+                                                        Header="Tara"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding Traseu}"
+                                                        Header="Traseu"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding InceputPerioada, StringFormat=dd-MM-yyyy}"
+                                                        Header="DataÎnceput"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding SfarsitPerioada, StringFormat=dd-MM-yyyy}"
+                                                        Header="DataSfârșit"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding CategorieVas}"
+                                                        Header="CategorieVas"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding Facilitati}"
+                                                        Header="Facilități"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding ViziteIncluse}"
+                                                        Header="ViziteIncluse"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding PretTransport}"
+                                                        Header="PrețTransport"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding PretCazare}"
+                                                        Header="PrețCazare"
+                                                        IsReadOnly="True" />
+
+                                                </DataGrid.Columns>
+                                            </DataGrid>
                                         </Grid>
                                     </TabItem.Content>
                                 </TabItem>
@@ -233,12 +1887,12 @@
                                                 Height="24"
                                                 HorizontalAlignment="Center"
                                                 Kind="HumanHiking" />
-                                            <TextBlock HorizontalAlignment="Center" Text="Cursiere" />
+                                            <TextBlock HorizontalAlignment="Center" Text="Circuite" />
                                         </StackPanel>
                                     </TabItem.Header>
                                     <TabItem.Content>
                                         <Grid>
-                                            <!--  ========= CURSIERE CONTENT ==========  -->
+                                            <!--  ========= Circuite CONTENT ==========  -->
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="30" />
                                                 <ColumnDefinition Width="*" />
@@ -246,10 +1900,160 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
 
+                                            <StackPanel
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="circuit"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteCircuitCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="circuit"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+
+                                                <TextBlock
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="Sezon: " />
+                                                <ComboBox
+                                                    Width="150"
+                                                    Margin="20,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    ItemsSource="{Binding Sezoane}"
+                                                    SelectedItem="{Binding SelectedCircuitSezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Width="Auto"
+                                                Height="Auto"
+                                                Margin="0,10,0,0"
+                                                AutoGenerateColumns="False"
+                                                BorderBrush="LightBlue"
+                                                BorderThickness="0.75"
+                                                CanUserDeleteRows="False"
+                                                CanUserReorderColumns="False"
+                                                CanUserResizeRows="False"
+                                                CanUserSortColumns="True"
+                                                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                                                ItemsSource="{Binding CircuiteList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedCircuit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectionMode="Single"
+                                                SelectionUnit="FullRow">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Text="*" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn
+                                                        Width="0.75*"
+                                                        Binding="{Binding IdCircuit}"
+                                                        Header="IdCi"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="0.75*"
+                                                        Binding="{Binding Sezon}"
+                                                        Header="Sezon"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Tara}"
+                                                        Header="Tara"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding Traseu}"
+                                                        Header="Traseu"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding InceputPerioada, StringFormat=dd-MM-yyyy}"
+                                                        Header="DataÎnceput"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding SfarsitPerioada, StringFormat=dd-MM-yyyy}"
+                                                        Header="DataSfârșit"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding NumarNopti}"
+                                                        Header="NrNopți"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding FacilitatiCazare}"
+                                                        Header="FacilitățiCazare"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="0*"
+                                                        Binding="{Binding Mese}"
+                                                        Header="Mese"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="1.5*"
+                                                        Binding="{Binding ViziteIncluse}"
+                                                        Header="ViziteIncluse"
+                                                        IsReadOnly="True">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style BasedOn="{StaticResource WrappingTextBlock}" TargetType="TextBlock" />
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding PretTransport}"
+                                                        Header="PrețTransport"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding PretCazare}"
+                                                        Header="PrețCazare"
+                                                        IsReadOnly="True" />
+
+                                                </DataGrid.Columns>
+                                            </DataGrid>
                                         </Grid>
                                     </TabItem.Content>
                                 </TabItem>
@@ -277,9 +2081,101 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
+
+                                            <StackPanel
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="oferta"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteOfertaCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="oferta"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Width="Auto"
+                                                Height="Auto"
+                                                Margin="0,10,0,0"
+                                                AutoGenerateColumns="False"
+                                                BorderBrush="LightBlue"
+                                                BorderThickness="0.75"
+                                                CanUserDeleteRows="False"
+                                                CanUserReorderColumns="False"
+                                                CanUserResizeRows="False"
+                                                CanUserSortColumns="True"
+                                                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                                                ItemsSource="{Binding OferteList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedOferta, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectionMode="Single"
+                                                SelectionUnit="FullRow">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Text="*" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdOferta}"
+                                                        Header="IdOf"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding TipOferta}"
+                                                        Header="TipOfertă"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding TipExcursie}"
+                                                        Header="TipExcursie"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdExcursie}"
+                                                        Header="IdExcursie"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Reducere}"
+                                                        Header="Reducere"
+                                                        IsReadOnly="True" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
 
                                         </Grid>
                                     </TabItem.Content>
@@ -340,9 +2236,106 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
+
+                                            <StackPanel
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="client"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteClientCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="client"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Width="Auto"
+                                                Height="Auto"
+                                                Margin="0,10,0,0"
+                                                AutoGenerateColumns="False"
+                                                BorderBrush="LightBlue"
+                                                BorderThickness="0.75"
+                                                CanUserDeleteRows="False"
+                                                CanUserReorderColumns="False"
+                                                CanUserResizeRows="False"
+                                                CanUserSortColumns="True"
+                                                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                                                ItemsSource="{Binding ClientiList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedClient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectionMode="Single"
+                                                SelectionUnit="FullRow">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Text="*" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdClient}"
+                                                        Header="IdCl"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Nume}"
+                                                        Header="Nume"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Prenume}"
+                                                        Header="Prenume"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding CNP}"
+                                                        Header="CNP"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Adresa}"
+                                                        Header="Adresa"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding NrTelefon}"
+                                                        Header="NrTelefon"
+                                                        IsReadOnly="True" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
 
                                         </Grid>
                                     </TabItem.Content>
@@ -371,9 +2364,121 @@
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="200" />
                                             </Grid.RowDefinitions>
+
+                                            <StackPanel
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding OpenDialogHostCommand}"
+                                                    CommandParameter="incasare"
+                                                    Content="{materialDesign:PackIcon Kind=PlusThick,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding DeleteIncasareCommand}"
+                                                    Content="{materialDesign:PackIcon Kind=Delete,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                                <Button
+                                                    Width="35"
+                                                    Height="35"
+                                                    Margin="20,0,0,0"
+                                                    Command="{Binding RefreshDataCommand}"
+                                                    CommandParameter="incasare"
+                                                    Content="{materialDesign:PackIcon Kind=Refresh,
+                                                                                      Size=20}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" />
+                                            </StackPanel>
+
+                                            <DataGrid
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Width="Auto"
+                                                Height="Auto"
+                                                Margin="0,10,0,0"
+                                                AutoGenerateColumns="False"
+                                                BorderBrush="LightBlue"
+                                                BorderThickness="0.75"
+                                                CanUserDeleteRows="False"
+                                                CanUserReorderColumns="False"
+                                                CanUserResizeRows="False"
+                                                CanUserSortColumns="True"
+                                                CellStyle="{StaticResource MaterialDesignDataGridCell}"
+                                                ItemsSource="{Binding IncasariList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedIncasare, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectionMode="Single"
+                                                SelectionUnit="FullRow">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn>
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Text="*" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdIncasare}"
+                                                        Header="IdIn"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdClient}"
+                                                        Header="IdClient"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding TipExcursie}"
+                                                        Header="TipExcursie"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding IdExcursie}"
+                                                        Header="IdExcursie"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Adulti}"
+                                                        Header="Adulți"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Copii}"
+                                                        Header="Copii"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding ValoareTotala}"
+                                                        Header="ValoareTotală"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding ValoareIncasata}"
+                                                        Header="ValoareÎncasată"
+                                                        IsReadOnly="True" />
+                                                    <DataGridTextColumn
+                                                        Width="*"
+                                                        Binding="{Binding Reducere}"
+                                                        Header="Reducere"
+                                                        IsReadOnly="True" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
 
                                         </Grid>
                                     </TabItem.Content>

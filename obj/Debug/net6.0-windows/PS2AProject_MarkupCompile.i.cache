@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 D:\University\Anul_III\PS2A\PS2AProject\App.xaml
-21386343338
+3950223164
 
-181545732803
+22849600488
 1971053111996
-Views\CustomMessageBox.xaml;Views\MainWindow.xaml;
+UserControls\InfoControl.xaml;Views\CustomMessageBox.xaml;Views\MainWindow.xaml;
 
-False
+True
 

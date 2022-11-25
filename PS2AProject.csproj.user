@@ -7,11 +7,17 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="UserControls\InfoControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="UserControls\InfoControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\CustomMessageBox.xaml">
       <SubType>Designer</SubType>
     </Page>
