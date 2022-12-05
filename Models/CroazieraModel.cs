@@ -6,24 +6,19 @@ using System.Threading.Tasks;
 
 namespace PS2AProject.Models
 {
-    public class CroazieraModel : BaseModel
+    public class CroazieraModel : ExcursieModel
     {
-        private Int32 _idCroaziera;
-        private String _sezon;
-        private String _tara;
         private String _traseu;
         private DateTime _inceputPerioada;
         private DateTime _sfarsitPerioada;
         private String _categorieVas;
         private String _facilitati;
         private String _viziteIncluse;
-        private Double _pretTransport;
-        private Double _pretCazare;
 
         public CroazieraModel(int idCroaziera, string sezon, string tara, string traseu, DateTime inceputPerioada, DateTime sfarsitPerioada,
-            string categorieVas, string facilitati, string viziteIncluse, double pretTransport, double pretCazare)
+            string categorieVas, string facilitati, string viziteIncluse, double pretTransport, double pretCazare, string rezervat)
         {
-            _idCroaziera = idCroaziera;
+            _idExcursie = idCroaziera;
             _sezon = sezon;
             _tara = tara;
             _traseu = traseu;
@@ -34,14 +29,15 @@ namespace PS2AProject.Models
             _viziteIncluse = viziteIncluse;
             _pretTransport = pretTransport;
             _pretCazare = pretCazare;
+            _rezervat = rezervat;
         }
 
         public Int32 IdCroaziera
         {
-            get => _idCroaziera;
+            get => _idExcursie;
             set
             {
-                _idCroaziera = value;
+                _idExcursie = value;
                 OnPropertyChanged();
             }
         }

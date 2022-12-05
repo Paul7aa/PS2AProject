@@ -224,7 +224,7 @@ namespace PS2AProject.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PS2AProject;V1.0.0.0;component/usercontrols/infocontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PS2AProject;component/usercontrols/infocontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\UserControls\InfoControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

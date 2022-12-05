@@ -14,8 +14,9 @@ namespace PS2AProject.Models
         private String _cnp;
         private String _adresa;
         private String _nrTelefon;
+        private String _clientTop;
 
-        public ClientModel(int idClient, string nume, string prenume, string cnp, string adresa, string nrTelefon)
+        public ClientModel(int idClient, string nume, string prenume, string cnp, string adresa, string nrTelefon, string clientTop)
         {
             _idClient = idClient;
             _nume = nume;
@@ -23,6 +24,7 @@ namespace PS2AProject.Models
             _cnp = cnp;
             _adresa = adresa;
             _nrTelefon = nrTelefon;
+            _clientTop = clientTop;
         }
 
         public Int32 IdClient
@@ -81,6 +83,16 @@ namespace PS2AProject.Models
             set
             {
                 _nrTelefon = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String ClientTop
+        {
+            get => _clientTop;
+            set
+            {
+                _clientTop = value;
                 OnPropertyChanged();
             }
         }

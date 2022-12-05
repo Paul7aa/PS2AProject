@@ -30,6 +30,10 @@ namespace PS2AProject.ViewModels
         private String _selectedTransport = "Fără Transport";
         private ObservableCollection<String> _categoriiVase = new ObservableCollection<string>() { "Croazieră", "Pontoon", "Yacht", "Catamaran", "Pescuit" };
         private String _selectedCategorieVas = "Croazieră";
+        private ObservableCollection<String> _tipuriRaport = new ObservableCollection<string>() { "Lunar", "Anual" };
+        private String _selectedTipRaport = "Lunar";
+        private ObservableCollection<String> _availableDates = new ObservableCollection<string>() { };
+        private String _selectedAvailableDate = "";
         private ObservableCollection<String> _ids = new ObservableCollection<String>() { };
         private String _selectedId = null;
 
@@ -39,16 +43,54 @@ namespace PS2AProject.ViewModels
         private String _enteredLocalitate = "";
         private String _enteredDenumire = "";
         private String _enteredFacilitati = "";
-        private String _enteredPretTransport = ""; 
-        private String _enteredPretCazare = ""; 
+        private String _enteredPretTransport = "";
+        private String _enteredPretCazare = "";
         private String _calculatedNights = "1";
         private String _enteredVizite = "";
         private String _enteredTraseu = "";
         private String _enteredTipOferta = "";
+        private String _enteredReducere = "";
+
+        //client
+        private String _enteredNume = "";
+        private String _enteredPrenume = "";
+        private String _enteredCNP = "";
+        private String _enteredAdresa = "";
+        private String _enteredTelefon;
 
         private String _selectedSejurSezon = "";
         private String _selectedCroazieraSezon = "";
         private String _selectedCircuitSezon = "";
+        private String _selectedTaraSejur = "";
+        private String _selectedTaraCroaziera = "";
+        private String _selectedTaraCircuit = "";
+
+        private String _pretIntial = "0";
+        private String _pretFinal = "0";
+
+        private String _searchTextSejur;
+        private String _searchTextCroaziera;
+        private String _searchTextCircuit;
+        private String _searchTextOferta;
+        private String _searchTextClient;
+        private String _raportSelectionType;
+
+        //rezervare
+        private String _currentTipExcursie = "";
+        private String _enteredAdulti = "0";
+        private String _enteredCopii = "0";
+        private String _pretTotalCalculated = "";
+        private String _pretAvansCalculated = "";
+        private Boolean _achitatAvans = false;
+        private Boolean _achitatPretTotal = false;
+        private String _reducere = "0";
+        private Double _totalFaraReducere = 0;
+        private Double _calculatedPret;
+        private Double _totalIncasat = 0;
+        private Double _pierderiPeReduceri = 0;
+        private Int32 _excursiiAchitateComplet = 0;
+        private Int32 _excursiiAchitateAvans = 0;
+        private Int32 _excursiiAnulate = 0;
 
         private ObservableCollection<SejurModel> _sejururiList = new ObservableCollection<SejurModel>();
         private ObservableCollection<CroazieraModel> _croaziereList = new ObservableCollection<CroazieraModel>();
@@ -57,6 +99,11 @@ namespace PS2AProject.ViewModels
         private ObservableCollection<IncasareModel> _incasariList = new ObservableCollection<IncasareModel>();
         private ObservableCollection<ClientModel> _clientiList = new ObservableCollection<ClientModel>();
 
+        private ObservableCollection<String> _tariSejururi = new ObservableCollection<string>();
+        private ObservableCollection<String> _tariCroaziere = new ObservableCollection<string>();
+        private ObservableCollection<String> _tariCircuite = new ObservableCollection<string>();
+
+        private ExcursieModel _selectedExcursie = null;
         private SejurModel _selectedSejur = null;
         private CroazieraModel _selectedCroaziera = null;
         private CircuitModel _selectedCircuit = null;
@@ -64,15 +111,17 @@ namespace PS2AProject.ViewModels
         private IncasareModel _selectedIncasare = null;
         private ClientModel _selectedClient = null;
 
-        //Add Sejur
 
         private Boolean _isDialogHostOpen = false;
+        private Boolean _isAddClientDialogHostOpen = false;
         private Boolean _isAddSejurDialogHostOpen = false;
         private Boolean _isAddCroazieraDialogHostOpen = false;
         private Boolean _isAddCircuitDialogHostOpen = false;
         private Boolean _isAddOfertaDialogHostOpen = false;
         private Boolean _isAddIncasareDialogHostOpen = false;
-        private Boolean _isAddClientDialogHostOpen = false;
+        private Boolean _isAfisareOfertaDialogHostOpen = false;
+        private Boolean _isAfisareChitantaDialogHostOpen = false;
+        private Boolean _isAfisareSituatieAnualaDialogHostOpen = false;
         private Boolean _isSejurCazareDialogHostOpen = false;
 
         //InfoControl properties
@@ -80,12 +129,14 @@ namespace PS2AProject.ViewModels
         private Boolean _tipCroazieraSelected = false;
         private Boolean _tipCircuitSelected = false;
 
-
+        //TabControl Properties
+        private Int32 _selectedTabIndex = 0;
         public MainWindowViewModel()
         {
             _sqlConnection = new SqlConnection(_sqlConnectionString);
             _sqlConnection.Open();
             RefreshAllData();
+            ClientTopUpdate();
         }
 
         public ObservableCollection<String> TipExcursie => _tipExcursie;
@@ -96,7 +147,7 @@ namespace PS2AProject.ViewModels
             {
                 _selectedTipExcursie = value;
                 TipSejurSelected = (_selectedTipExcursie == "Sejur") ? true : false;
-                TipCroazieraSelected = (_selectedTipExcursie == "Croazieră") ? true : false;
+                TipCroazieraSelected = (_selectedTipExcursie == "Croazieră" || _selectedTipExcursie == "Croaziera") ? true : false;
                 TipCircuitSelected = (_selectedTipExcursie == "Circuit") ? true : false;
                 SetIDs();
                 OnPropertyChanged();
@@ -176,7 +227,7 @@ namespace PS2AProject.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         public ObservableCollection<String> IDs => _ids;
         public String SelectedId
         {
@@ -188,14 +239,18 @@ namespace PS2AProject.ViewModels
                 {
                     case "Sejur":
                         SelectedSejur = SejururiList.Where(X => X.IdSejur.ToString() == _selectedId).FirstOrDefault();
+                        ItemPretInitial = (SelectedSejur != null) ? (SelectedSejur.PretCazare + SelectedSejur.PretTransport).ToString() : "0";
                         break;
-                        
+
                     case "Croazieră":
+                    case "Croaziera":
                         SelectedCroaziera = CroaziereList.Where(X => X.IdCroaziera.ToString() == _selectedId).FirstOrDefault();
+                        ItemPretInitial = (SelectedCroaziera != null) ? (SelectedCroaziera.PretCazare + SelectedCroaziera.PretTransport).ToString() : "0";
                         break;
-                        
+
                     case "Circuit":
                         SelectedCircuit = CircuiteList.Where(X => X.IdCircuit.ToString() == _selectedId).FirstOrDefault();
+                        ItemPretInitial = (SelectedCircuit != null) ? (SelectedCircuit.PretCazare + SelectedCircuit.PretTransport).ToString() : "0";
                         break;
 
                     default:
@@ -215,6 +270,8 @@ namespace PS2AProject.ViewModels
                 _selectedTransport = value;
                 if (_selectedTransport == "Fără Transport" && IsAddSejurDialogHostOpen)
                     EnteredPretTransport = "0";
+                else
+                    EnteredPretTransport = "";
                 OnPropertyChanged();
             }
         }
@@ -226,6 +283,54 @@ namespace PS2AProject.ViewModels
             set
             {
                 _selectedCategorieVas = value;
+                OnPropertyChanged();
+            }
+        }
+        public ObservableCollection<String> TipuriRaport => _tipuriRaport;
+        public String SelectedTipRaport
+        {
+            get => _selectedTipRaport;
+            set
+            {
+                _selectedTipRaport = value;
+                if (_selectedTipRaport != null)
+                {
+                    TotalIncasat = 0;
+                    PierderiPeReduceri = 0;
+                    ExcursiiAchitateComplet = 0;
+                    ExcursiiAchitateAvans = 0;
+                    ExcursiiAnulate = 0;
+                    if (_selectedTipRaport == "Anual") {
+                        RaportSelectionType = "Anul: ";
+                    }
+                    else 
+                    {
+                        RaportSelectionType = "Luna: ";
+                    }
+                    SetAvailableDates();
+                }
+                OnPropertyChanged();
+            }
+        }
+        public ObservableCollection<String> AvailableDates => _availableDates;
+        public String SelectedAvailableDate
+        {
+            get => _selectedAvailableDate;
+            set
+            {
+                _selectedAvailableDate = value;
+                if(_selectedAvailableDate!=null)
+                    CalculateTotals();
+                OnPropertyChanged();
+            }
+        }
+
+        public String RaportSelectionType
+        {
+            get => _raportSelectionType;
+            set
+            {
+                _raportSelectionType = value;
                 OnPropertyChanged();
             }
         }
@@ -323,7 +428,7 @@ namespace PS2AProject.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
 
         public String EnteredVizite
         {
@@ -355,6 +460,168 @@ namespace PS2AProject.ViewModels
             }
         }
 
+        public String ItemPretInitial
+        {
+            get => _pretIntial;
+            set
+            {
+                _pretIntial = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String ItemPretFinal
+        {
+            get => _pretFinal;
+            set
+            {
+                _pretFinal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredReducere
+        {
+            get => _enteredReducere;
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    _enteredReducere = String.Format("{0:N2}", value);
+                    if (!String.IsNullOrEmpty(ItemPretInitial) && Int32.Parse(EnteredReducere) > 0)
+                    {
+                        ItemPretFinal = String.Format("{0:N2}",
+                            (Double.Parse(ItemPretInitial) - (Int32.Parse(EnteredReducere) * Double.Parse(ItemPretInitial) / 100)).ToString());
+                    }
+                }
+                else
+                    _enteredReducere = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredNume
+        {
+            get => _enteredNume;
+            set
+            {
+                _enteredNume = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredPrenume
+        {
+            get => _enteredPrenume;
+            set
+            {
+                _enteredPrenume = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredCNP
+        {
+            get => _enteredCNP;
+            set
+            {
+                _enteredCNP = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredAdresa
+        {
+            get => _enteredAdresa;
+            set
+            {
+                _enteredAdresa = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredTelefon
+        {
+            get => _enteredTelefon;
+            set
+            {
+                _enteredTelefon = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String CurrentTipExcursie
+        {
+            get => _currentTipExcursie;
+            set
+            {
+                _currentTipExcursie = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredAdulti
+        {
+            get => _enteredAdulti;
+            set
+            {
+                _enteredAdulti = value;
+                CalculatePretTotal();
+                OnPropertyChanged();
+            }
+        }
+
+        public String EnteredCopii
+        {
+            get => _enteredCopii;
+            set
+            {
+                _enteredCopii = value;
+                CalculatePretTotal();
+                OnPropertyChanged();
+            }
+        }
+
+        public String PretTotalCalculated
+        {
+            get => _pretTotalCalculated;
+            set
+            {
+                _pretTotalCalculated = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String PretAvansCalculated
+        {
+            get => _pretAvansCalculated;
+            set
+            {
+                _pretAvansCalculated = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Boolean AchitatAvans
+        {
+            get => _achitatAvans;
+            set
+            {
+                _achitatAvans = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Boolean AchitatPretTotal
+        {
+            get => _achitatPretTotal;
+            set
+            {
+                _achitatPretTotal = value;
+                OnPropertyChanged();
+            }
+        }
+
         public String SelectedSejurSezon
         {
             get => _selectedSejurSezon;
@@ -362,6 +629,8 @@ namespace PS2AProject.ViewModels
             {
                 _selectedSejurSezon = value;
                 RefreshSejururiData();
+                UpdateTariLists();
+                ClearSearchTexts();
                 OnPropertyChanged();
             }
         }
@@ -373,6 +642,8 @@ namespace PS2AProject.ViewModels
             {
                 _selectedCroazieraSezon = value;
                 RefreshCroaziereData();
+                UpdateTariLists();
+                ClearSearchTexts();
                 OnPropertyChanged();
             }
         }
@@ -384,6 +655,122 @@ namespace PS2AProject.ViewModels
             {
                 _selectedCircuitSezon = value;
                 RefreshCircuiteData();
+                UpdateTariLists();
+                ClearSearchTexts();
+                OnPropertyChanged();
+            }
+        }
+
+        public String SelectedTaraSejur
+        {
+            get => _selectedTaraSejur;
+            set
+            {
+                _selectedTaraSejur = value;
+                RefreshSejururiData();
+                ClearSearchTexts();
+                OnPropertyChanged();
+            }
+        }
+
+        public String SelectedTaraCroaziera
+        {
+            get => _selectedTaraCroaziera;
+            set
+            {
+                _selectedTaraCroaziera = value;
+                RefreshCroaziereData();
+                ClearSearchTexts();
+                OnPropertyChanged();
+            }
+        }
+
+        public String SelectedTaraCircuit
+        {
+            get => _selectedTaraCircuit;
+            set
+            {
+                _selectedTaraCircuit = value;
+                RefreshCircuiteData();
+                ClearSearchTexts();
+                OnPropertyChanged();
+            }
+        }
+
+        public String SearchTextSejur
+        {
+            get => _searchTextSejur;
+            set
+            {
+                _searchTextSejur = value;
+                RefreshSejururiData();
+                if (!String.IsNullOrEmpty(_searchTextSejur))
+                    SejururiList = new ObservableCollection<SejurModel>(SejururiList
+                        .Where(x => x.Tara.ToLower().Contains(_searchTextSejur.Trim().ToLower())
+                        || x.Localitate.ToLower().Contains(_searchTextSejur.Trim().ToLower())).ToList());
+                OnPropertyChanged();
+            }
+        }
+
+        public String SearchTextCroaziera
+        {
+            get => _searchTextCroaziera;
+            set
+            {
+                _searchTextCroaziera = value;
+                RefreshCroaziereData();
+                if (!String.IsNullOrEmpty(_searchTextCroaziera))
+                    CroaziereList = new ObservableCollection<CroazieraModel>(CroaziereList
+                        .Where(x => x.Tara.ToLower().Contains(_searchTextCroaziera.Trim().ToLower())
+                        || x.Traseu.ToLower().Contains(_searchTextCroaziera.Trim().ToLower())
+                        || x.ViziteIncluse.ToLower().Contains(_searchTextCroaziera.Trim().ToLower())).ToList());
+                OnPropertyChanged();
+            }
+        }
+
+        public String SearchTextCircuit
+        {
+            get => _searchTextCircuit;
+            set
+            {
+                _searchTextCircuit = value;
+                RefreshCircuiteData();
+                if (!String.IsNullOrEmpty(_searchTextCircuit))
+                    CircuiteList = new ObservableCollection<CircuitModel>(CircuiteList
+                        .Where(x => x.Tara.ToLower().Contains(_searchTextCircuit.Trim().ToLower())
+                        || x.Traseu.ToLower().Contains(_searchTextCircuit.Trim().ToLower())
+                        || x.ViziteIncluse.ToLower().Contains(_searchTextCircuit.Trim().ToLower())).ToList());
+                OnPropertyChanged();
+            }
+        }
+
+        public String SearchTextOferta
+        {
+            get => _searchTextOferta;
+            set
+            {
+                _searchTextOferta = value;
+                RefreshOferteData();
+                if (!String.IsNullOrEmpty(_searchTextOferta))
+                    OferteList = new ObservableCollection<OfertaModel>(OferteList
+                        .Where(x => x.TipExcursie.ToLower().Contains(_searchTextOferta.Trim().ToLower())
+                        || x.TipOferta.ToLower().Contains(_searchTextOferta.Trim().ToLower())).ToList());
+                OnPropertyChanged();
+            }
+        }
+        
+
+        public String SearchTextClient
+        {
+            get => _searchTextClient;
+            set
+            {
+                _searchTextClient = value;
+                RefreshClientiData();
+                if (!String.IsNullOrEmpty(_searchTextClient))
+                    ClientiList = new ObservableCollection<ClientModel>(ClientiList
+                        .Where(x => x.Nume.ToLower().Contains(_searchTextClient.Trim().ToLower())
+                        || x.IdClient.ToString().ToLower().Contains(_searchTextClient.Trim().ToLower())).ToList());
                 OnPropertyChanged();
             }
         }
@@ -493,12 +880,79 @@ namespace PS2AProject.ViewModels
             }
         }
 
+
+        public ObservableCollection<String> TariSejururi
+        {
+            get
+            {
+                if (_tariSejururi == null)
+                    _tariSejururi = new ObservableCollection<String>();
+                return _tariSejururi;
+            }
+            set
+            {
+                _tariSejururi = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public ObservableCollection<String> TariCroaziere
+        {
+            get
+            {
+                if (_tariCroaziere == null)
+                    _tariCroaziere = new ObservableCollection<String>();
+                return _tariCroaziere;
+            }
+            set
+            {
+                _tariCroaziere = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public ObservableCollection<String> TariCircuite
+        {
+            get
+            {
+                if (_tariCircuite == null)
+                    _tariCircuite = new ObservableCollection<String>();
+                return _tariCircuite;
+            }
+            set
+            {
+                _tariCircuite = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ExcursieModel SelectedExcursie
+        {
+            get => _selectedExcursie;
+            set
+            {
+                _selectedExcursie = value;
+                if (value != null)
+                    if (_selectedExcursie.GetType() == typeof(SejurModel))
+                        CurrentTipExcursie = "Sejur";
+                    else if (_selectedExcursie.GetType() == typeof(CroazieraModel))
+                        CurrentTipExcursie = "Croaziera";
+                    else if (_selectedExcursie.GetType() == typeof(CircuitModel))
+                        CurrentTipExcursie = "Circuit";
+
+                OnPropertyChanged();
+            }
+        }
+
         public SejurModel SelectedSejur
         {
             get => _selectedSejur;
             set
             {
                 _selectedSejur = value;
+                SelectedExcursie = _selectedSejur;
                 OnPropertyChanged();
             }
         }
@@ -508,6 +962,7 @@ namespace PS2AProject.ViewModels
             set
             {
                 _selectedCroaziera = value;
+                SelectedExcursie = _selectedCroaziera;
                 OnPropertyChanged();
             }
         }
@@ -517,6 +972,8 @@ namespace PS2AProject.ViewModels
             set
             {
                 _selectedCircuit = value;
+                SelectedExcursie = _selectedCircuit;
+
                 OnPropertyChanged();
             }
         }
@@ -526,6 +983,22 @@ namespace PS2AProject.ViewModels
             set
             {
                 _selectedOferta = value;
+                if (_selectedOferta != null)
+                {
+                    switch (_selectedOferta.TipExcursie)
+                    {
+                        case "Sejur":
+                            SelectedExcursie = SejururiList.Where(x => x.IdSejur == _selectedOferta.IdExcursie).FirstOrDefault();
+                            break;
+                        case "Croazieră":
+                        case "Croaziera":
+                            SelectedExcursie = CroaziereList.Where(x => x.IdCroaziera == _selectedOferta.IdExcursie).FirstOrDefault();
+                            break;
+                        case "Circuit":
+                            SelectedExcursie = CircuiteList.Where(x => x.IdCircuit == _selectedOferta.IdExcursie).FirstOrDefault();
+                            break;
+                    }
+                }
                 OnPropertyChanged();
             }
         }
@@ -535,6 +1008,7 @@ namespace PS2AProject.ViewModels
             set
             {
                 _selectedClient = value;
+                CalculateReducere();
                 OnPropertyChanged();
             }
         }
@@ -547,13 +1021,22 @@ namespace PS2AProject.ViewModels
                 OnPropertyChanged();
             }
         }
-
         public Boolean IsDialogHostOpen
         {
             get => _isDialogHostOpen;
             set
             {
                 _isDialogHostOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Boolean IsAddClientDialogHostOpen
+        {
+            get => _isAddClientDialogHostOpen;
+            set
+            {
+                _isAddClientDialogHostOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -607,12 +1090,32 @@ namespace PS2AProject.ViewModels
             }
         }
 
-        public Boolean IsAddClientDialogHostOpen
+        public Boolean IsAfisareOfertaDialogHostOpen
         {
-            get => _isAddClientDialogHostOpen;
+            get => _isAfisareOfertaDialogHostOpen;
             set
             {
-                _isAddClientDialogHostOpen = value;
+                _isAfisareOfertaDialogHostOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Boolean IsAfisareChitantaDialogHostOpen
+        {
+            get => _isAfisareChitantaDialogHostOpen;
+            set
+            {
+                _isAfisareChitantaDialogHostOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Boolean IsAfisareSituatieAnualaDialogHostOpen
+        {
+            get => _isAfisareSituatieAnualaDialogHostOpen;
+            set
+            {
+                _isAfisareSituatieAnualaDialogHostOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -622,7 +1125,89 @@ namespace PS2AProject.ViewModels
             get => _isSejurCazareDialogHostOpen;
             set
             {
-                _isSejurCazareDialogHostOpen= value;
+                _isSejurCazareDialogHostOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Int32 SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set
+            {
+                _selectedTabIndex = value;
+                ResetSelections();
+                OnPropertyChanged();
+            }
+        }
+        
+
+        public String Reducere
+        {
+            get => _reducere;
+            set
+            {
+                _reducere = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Double CalculatedPret
+        {
+            get => _calculatedPret;
+            set
+            {
+                _calculatedPret = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Double TotalIncasat
+        {
+            get => _totalIncasat;
+            set
+            {
+                _totalIncasat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Double PierderiPeReduceri
+        {
+            get => _pierderiPeReduceri;
+            set
+            {
+                _pierderiPeReduceri = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Int32 ExcursiiAchitateComplet
+        {
+            get => _excursiiAchitateComplet;
+            set
+            {
+                _excursiiAchitateComplet = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Int32 ExcursiiAchitateAvans
+        {
+            get => _excursiiAchitateAvans;
+            set
+            {
+                _excursiiAchitateAvans = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Int32 ExcursiiAnulate
+        {
+            get => _excursiiAnulate;
+            set
+            {
+                _excursiiAnulate = value;
                 OnPropertyChanged();
             }
         }

@@ -14,7 +14,7 @@ namespace PS2AProject.Domain.ValidationRules
         {
             DateTime endDate = (DateTime)value;
 
-            if (DateTime.Compare(endDate.Date, StartDate.StartDate.Date) <= 0)
+            if (DateTime.Compare(endDate.Date, StartDate.StartDate.Date) < 0)
                 return new ValidationResult(false, "Data de sfârșit nu este validă!");
           
             return ValidationResult.ValidResult;

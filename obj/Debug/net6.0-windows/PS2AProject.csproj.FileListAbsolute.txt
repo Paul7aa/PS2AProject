@@ -1,8 +1,3 @@
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.csproj.AssemblyReference.cache
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\MainWindow.g.cs
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\App.g.cs
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject_MarkupCompile.cache
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject_MarkupCompile.lref
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\PS2AProject.exe
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\PS2AProject.deps.json
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\PS2AProject.runtimeconfig.json
@@ -16,7 +11,19 @@ D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\runtimes\win-x6
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\runtimes\win-x86\native\sni.dll
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\University\Anul_III\PS2A\PS2AProject\bin\Debug\net6.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.csproj.AssemblyReference.cache
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\ChitantaControl.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\MainWindow.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\App.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject_MarkupCompile.cache
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject_MarkupCompile.lref
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\App.baml
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\ChitantaControl.baml
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.baml
+D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.baml
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\MainWindow.baml
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.g.resources
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.GeneratedMSBuildEditorConfig.editorconfig
@@ -29,8 +36,3 @@ D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\refint\PS2AProj
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.pdb
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\PS2AProject.genruntimeconfig.cache
 D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\ref\PS2AProject.dll
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.g.cs
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\Views\CustomMessageBox.baml
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.g.cs
-D:\University\Anul_III\PS2A\PS2AProject\obj\Debug\net6.0-windows\UserControls\InfoControl.baml

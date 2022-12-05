@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace PS2AProject.Models
 {
-    public class SejurModel : BaseModel
+    public class SejurModel : ExcursieModel
     {
-        Int32 _idSejur;
-        String _sezon; //10
-        String _tara; //50
         String _localitate; //50
         DateTime _inceputPerioada;
         DateTime _sfarsitPerioada;
@@ -21,14 +18,13 @@ namespace PS2AProject.Models
         String _mese; //50
         String _faciltati; //100
         String _transport; //50
-        Double _pretTransport;
-        Double _pretCazare;
 
         public SejurModel(int idSejur, string sezon, string tara, string localitate, DateTime inceputPerioada, DateTime sfarsitPerioada,
                             byte numarNopti, string tipCazare, string denumire, byte nrStele, string mese,
-                            string faciltati, string transport, double pretTransport, double pretCazare)
+                            string faciltati, string transport, double pretTransport, double pretCazare,
+                            string rezervat)
         {
-            _idSejur = idSejur;
+            _idExcursie = idSejur;
             _sezon = sezon;
             _tara = tara;
             _localitate = localitate;
@@ -43,14 +39,15 @@ namespace PS2AProject.Models
             _transport = transport;
             _pretTransport = pretTransport;
             _pretCazare = pretCazare;
+            _rezervat = rezervat;
         }
 
         public Int32 IdSejur
         {
-            get => _idSejur; 
+            get => _idExcursie; 
             set
             {
-                _idSejur = value;
+                _idExcursie = value;
                 OnPropertyChanged();
             }
         }

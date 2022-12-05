@@ -112,7 +112,7 @@ namespace PS2AProject.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PS2AProject;V1.0.0.0;component/views/custommessagebox.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PS2AProject;component/views/custommessagebox.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\CustomMessageBox.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

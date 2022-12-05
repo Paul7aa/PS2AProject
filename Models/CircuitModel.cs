@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace PS2AProject.Models
 {
-    public class CircuitModel:BaseModel
+    public class CircuitModel:ExcursieModel
     {
-        private Int32 _idCircuit;
-        private String _sezon;
-        private String _tara;
         private String _traseu;
         private DateTime _inceputPerioada;
         private DateTime _sfarsitPerioada;
@@ -18,13 +15,11 @@ namespace PS2AProject.Models
         private String _facilitatiCazare;
         private String _viziteIncluse;
         private String _mese;
-        private Double _pretTransport;
-        private Double _pretCazare;
 
         public CircuitModel(int idCircuit, string sezon, string tara, string traseu, DateTime inceputPerioada, DateTime sfarsitPerioada,
-            byte numarNopti, string facilitatiCazare, string viziteIncluse, string mese, double pretTransport, double pretCazare)
+            byte numarNopti, string facilitatiCazare, string viziteIncluse, string mese, double pretTransport, double pretCazare, string rezervat)
         {
-            _idCircuit = idCircuit;
+            _idExcursie = idCircuit;
             _sezon = sezon;
             _tara = tara;
             _traseu = traseu;
@@ -36,14 +31,15 @@ namespace PS2AProject.Models
             _mese = mese;
             _pretTransport = pretTransport;
             _pretCazare = pretCazare;
+            _rezervat = rezervat;
         }
 
         public Int32 IdCircuit
         {
-            get => _idCircuit;
+            get => _idExcursie;
             set
             {
-                _idCircuit= value;
+                _idExcursie = value;
                 OnPropertyChanged();
             }
         }

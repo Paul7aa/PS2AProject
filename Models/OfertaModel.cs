@@ -90,10 +90,10 @@ namespace PS2AProject.Models
 
         public Double PretFinal
         {
-            get => _pretInitial;
+            get => _pretFinal;
             set
             {
-                _pretInitial = value;
+                _pretFinal = value;
                 OnPropertyChanged();
             }
         }

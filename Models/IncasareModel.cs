@@ -17,8 +17,10 @@ namespace PS2AProject.Models
         private Double _valoareTotala;
         private Double _valoareIncasata;
         private Byte _reducere;
+        private DateTime _dataIncasarii;
+        private String _status;
 
-        public IncasareModel(int idIncasare, int idClient, string tipExcursie, int idExcursie, byte adulti, byte copii, double valoareTotala, double valoareIncasata, byte reducere)
+        public IncasareModel(int idIncasare, int idClient, string tipExcursie, int idExcursie, byte adulti, byte copii, double valoareTotala, double valoareIncasata, byte reducere, DateTime dataIncasarii, string status)
         {
             _idIncasare = idIncasare;
             _idClient = idClient;
@@ -29,6 +31,8 @@ namespace PS2AProject.Models
             _valoareTotala = valoareTotala;
             _valoareIncasata = valoareIncasata;
             _reducere = reducere;
+            _dataIncasarii = dataIncasarii;
+            _status = status;
         }
 
         public Int32 IdIncasare
@@ -121,5 +125,26 @@ namespace PS2AProject.Models
             }
         }
 
+        public DateTime DataIncasarii
+        {
+            get => _dataIncasarii;
+            set
+            {
+                _dataIncasarii = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public String Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Byte NrPersoane => Convert.ToByte(Adulti + Copii);
     }
 }
