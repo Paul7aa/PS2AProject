@@ -15,7 +15,30 @@ Pentru fiecare client se retin datele personale(cele din buletin/pasaport). Un c
 ## Structura tabelelor create
 
 Baza de date este formata din urmatoarele tabele:
-Pentru sectiunea de excursii/oferte:
+##### Pentru sectiunea de excursii/oferte:
 
 Sejururi:
+
 ![SejururiImage](/images/Sejururi.png)
+
+Croaziere
+
+![CroaziereImage](/images/Croaziere.png)
+
+Circuite
+
+![CircuiteImage](/images/Circuite.png)
+
+Oferte
+
+![OferteImage](/images/Oferte.png)
+
+##### Pentru sectiunea de management
+
+Clienti
+
+![ClientiImage](/images/Clienti.png)
+
+Incasari
+
+![IncasariImage](/images/Incasari.png)
