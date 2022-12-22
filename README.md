@@ -1,0 +1,6 @@
+# Bază de date pentru o firmă de turism
+
+## Descrierea Temei de Proiect
+
+Se doreste informatizarea unei agentii de turism a carei oferta consta in excursii (sejur,circuit,croaziera) pe sezoane,oferte speciale(revelion, pasti, 1 mai, last minute, etc.), in mai multe tari. In fiecare tara exista oferte de sejururi pentru mai multe loclalitati pentru care se precizeaza perioada, tip cazare (denumire- hotel-pensiune-apartamente-etc.,categorie (nr stele/margarete), facilitati, mic dejun/demipensiune/pensiune completa/all inclusive, transport: propriu/autocar/avion. Pentru circuite se precizeaza traseul exact, numarul de nopti , facilitate cazare, vizite incluse,etc. Pentru croaziere, perioada,categorie vas, facilitate, traseu, vizite incluse, etc. Pentru toate excursiile se precizeaza pretul pe sejur/croaziera/circuit de persoana. Copii beneficiaza de reducere 50% pentru cazare doar, nu si transport.
+Pentru fiecare client se retin datele personale(cele din buletin/pasaport). Un client in momentul in care opteaza pt o excusrsie face o rezervare si poate plati integral, sau doar un avans de 20%, pentru care se elibereaza chitante . Daca plateste integral beneficiaza de o reducere de 5% din costul excursiei. Daca renunta la rezervare pierde suma data ca avans, sau daca a achitat integral, pierde doa 20% din suma.
