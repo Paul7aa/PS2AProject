@@ -8,8 +8,11 @@ Pentru fiecare client se retin datele personale(cele din buletin/pasaport). Un c
 ## Cerinte extra
 
 •	Se poate lista in orice moment oferta completa a agentiei sau numai pe : tip/sezon/oferte speciale/tara/in functie de un anumit camp (!!!cel putin o lista)(tip cazare, cu sau fara transport, etc.) sau numai oferta unei anume excursii.
+
 •	Se vor tipari chitante pentru fiecare incasare.
+
 •	Se poate obtine o lista anuala cu toti clientii agentiei . Daca un client a folosit serviciile agentiei de mai multe ori intr-un an,el va fi marcat in baza de date cu un camp special (Client top) .In acet caz beneficiaza de o reducere de 2% la orice excursie.
+
 •	Se vor obtine situatii cu incasarile firmei lunar, anual, precum si situatia reducerilor acordate lunar si annual.
 
 ## Structura tabelelor create
